@@ -534,7 +534,7 @@ class Experiment(CallbackNotifier):
         sampling_start = time.time()
 
         # Training/collection iterations
-        for batch in self.collector:
+        for batch in self.collector: #!! important
             # Logging collection
             collection_time = time.time() - sampling_start
             current_frames = batch.numel()
@@ -564,14 +564,14 @@ class Experiment(CallbackNotifier):
                         self.config.train_batch_size(self.on_policy)
                         // self.config.train_minibatch_size(self.on_policy)
                     ):
-                        training_tds.append(self._optimizer_loop(group))
+                        training_tds.append(self._optimizer_loop(group)) : #!! important
                 training_td = torch.stack(training_tds)
                 self.logger.log_training(
                     group, training_td, step=self.n_iters_performed
                 )
 
                 # Callback
-                self._on_train_end(training_td, group)
+                self._on_train_end(training_td, group) : 
 
                 # Exploration update
                 if isinstance(self.group_policies[group], TensorDictSequential):
@@ -579,7 +579,7 @@ class Experiment(CallbackNotifier):
                 else:
                     explore_layer = self.group_policies[group]
                 if hasattr(explore_layer, "step"):  # Step exploration annealing
-                    explore_layer.step(current_frames)
+                    explore_layer.step(current_frames) : #!! important
 
             # Update policy in collector
             self.collector.update_policy_weights_()
@@ -607,7 +607,7 @@ class Experiment(CallbackNotifier):
                 and (self.total_frames % self.config.evaluation_interval == 0)
                 and (len(self.config.loggers) or self.config.create_json)
             ):
-                self._evaluation_loop()
+                self._evaluation_loop() : #!! important
 
             # End of step
             self.n_iters_performed += 1
@@ -616,7 +616,7 @@ class Experiment(CallbackNotifier):
                 self.config.checkpoint_interval > 0
                 and self.total_frames % self.config.checkpoint_interval == 0
             ):
-                self._save_experiment()
+                self._save_experiment() : #!! important
             pbar.update()
             sampling_start = time.time()
 
