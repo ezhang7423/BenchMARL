@@ -31,11 +31,6 @@ from benchmarl.environments import Task
 from benchmarl.experiment.callback import Callback, CallbackNotifier
 from benchmarl.experiment.logger import Logger
 from benchmarl.models.common import ModelConfig
-from benchmarl.utils import _read_yaml_config, seed_everything
-
-_has_hydra = importlib.util.find_spec("hydra") is not None
-if _has_hydra:
-    from hydra.core.hydra_config import HydraConfig
 
 
 @dataclass
@@ -228,30 +223,6 @@ class ExperimentConfig:
             else self.exploration_anneal_frames
         )
 
-    @staticmethod
-    def get_from_yaml(path: Optional[str] = None):
-        """
-        Load the experiment configuration from yaml
-
-        Args:
-            path (str, optional): The full path of the yaml file to load from.
-                If None, it will default to
-                ``benchmarl/conf/experiment/base_experiment.yaml``
-
-        Returns:
-            the loaded :class:`~benchmarl.experiment.ExperimentConfig`
-        """
-        if path is None:
-            yaml_path = (
-                Path(__file__).parent.parent
-                / "conf"
-                / "experiment"
-                / "base_experiment.yaml"
-            )
-            return ExperimentConfig(**_read_yaml_config(str(yaml_path.resolve())))
-        else:
-            return ExperimentConfig(**_read_yaml_config(path))
-
     def validate(self, on_policy: bool):
         """
         Validates config.
@@ -338,7 +309,6 @@ class Experiment(CallbackNotifier):
 
     def _setup(self):
         self.config.validate(self.on_policy)
-        seed_everything(self.seed)
         self._set_action_type()
         self._setup_task()
         self._setup_algorithm()
@@ -452,9 +422,9 @@ class Experiment(CallbackNotifier):
             storing_device=self.config.train_device,
             frames_per_batch=self.config.collected_frames_per_batch(self.on_policy),
             total_frames=self.config.get_max_n_frames(self.on_policy),
-            init_random_frames=self.config.off_policy_init_random_frames
-            if not self.on_policy
-            else 0,
+            init_random_frames=(
+                self.config.off_policy_init_random_frames if not self.on_policy else 0
+            ),
         )
 
     def _setup_name(self):
@@ -473,10 +443,7 @@ class Experiment(CallbackNotifier):
             if self.config.save_folder is not None:
                 folder_name = Path(self.config.save_folder)
             else:
-                if _has_hydra and HydraConfig.initialized():
-                    folder_name = Path(HydraConfig.get().runtime.output_dir)
-                else:
-                    folder_name = Path(os.getcwd())
+                folder_name = Path(os.getcwd())
             self.name = generate_exp_name(
                 f"{self.algorithm_name}_{self.task_name}_{self.model_name}", ""
             )
@@ -534,7 +501,7 @@ class Experiment(CallbackNotifier):
         sampling_start = time.time()
 
         # Training/collection iterations
-        for batch in self.collector: #!! important
+        for batch in self.collector:  #!! important
             # Logging collection
             collection_time = time.time() - sampling_start
             current_frames = batch.numel()
@@ -564,14 +531,14 @@ class Experiment(CallbackNotifier):
                         self.config.train_batch_size(self.on_policy)
                         // self.config.train_minibatch_size(self.on_policy)
                     ):
-                        training_tds.append(self._optimizer_loop(group)) : #!! important
+                        training_tds.append(self._optimizer_loop(group))  #!! important
                 training_td = torch.stack(training_tds)
                 self.logger.log_training(
                     group, training_td, step=self.n_iters_performed
                 )
 
                 # Callback
-                self._on_train_end(training_td, group) : 
+                self._on_train_end(training_td, group)  #!!
 
                 # Exploration update
                 if isinstance(self.group_policies[group], TensorDictSequential):
@@ -579,7 +546,7 @@ class Experiment(CallbackNotifier):
                 else:
                     explore_layer = self.group_policies[group]
                 if hasattr(explore_layer, "step"):  # Step exploration annealing
-                    explore_layer.step(current_frames) : #!! important
+                    explore_layer.step(current_frames)  #!! important
 
             # Update policy in collector
             self.collector.update_policy_weights_()
@@ -607,7 +574,7 @@ class Experiment(CallbackNotifier):
                 and (self.total_frames % self.config.evaluation_interval == 0)
                 and (len(self.config.loggers) or self.config.create_json)
             ):
-                self._evaluation_loop() : #!! important
+                self._evaluation_loop()  #!! important
 
             # End of step
             self.n_iters_performed += 1
@@ -616,7 +583,7 @@ class Experiment(CallbackNotifier):
                 self.config.checkpoint_interval > 0
                 and self.total_frames % self.config.checkpoint_interval == 0
             ):
-                self._save_experiment() : #!! important
+                self._save_experiment()  #!! important
             pbar.update()
             sampling_start = time.time()
 
