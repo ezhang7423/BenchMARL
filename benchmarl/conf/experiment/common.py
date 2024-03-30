@@ -1,32 +1,10 @@
-
 from __future__ import annotations
 
-import copy
-import importlib
+from dataclasses import dataclass
+from typing import List, Optional
 
-import os
-import time
-from collections import OrderedDict
-from dataclasses import dataclass, MISSING
-from pathlib import Path
-from typing import Dict, List, Optional
+from benchmarl.lib.utils import list_field
 
-import torch
-from tensordict import TensorDictBase
-from tensordict.nn import TensorDictSequential
-from torchrl.collectors import SyncDataCollector
-from torchrl.envs import SerialEnv, TransformedEnv
-from torchrl.envs.transforms import Compose
-from torchrl.envs.utils import ExplorationType, set_exploration_type
-from torchrl.record.loggers import generate_exp_name
-from tqdm import tqdm
-
-from benchmarl.conf.algorithm.cfg_common import AlgorithmConfig
-from benchmarl.environments import Task
-from benchmarl.experiment.callback import Callback, CallbackNotifier
-from benchmarl.experiment.logger import Logger
-from benchmarl.models.common import ModelConfig
-from benchmarl.utils import df, list_field
 
 @dataclass
 class ExperimentConfig:
@@ -37,7 +15,6 @@ class ExperimentConfig:
     Parameters in this class aim to be agnostic of the algorithm, task or model used.
     To know their meaning, please check out the descriptions in ``benchmarl/conf/experiment/base_experiment.yaml``
     """
-
 
     # The device for collection (e.g. cuda)
     sampling_device: str = "cuda"
@@ -263,30 +240,6 @@ class ExperimentConfig:
             else self.exploration_anneal_frames
         )
 
-    # @staticmethod
-    # def get_from_yaml(path: Optional[str] = None):
-    #     """
-    #     Load the experiment configuration from yaml
-
-    #     Args:
-    #         path (str, optional): The full path of the yaml file to load from.
-    #             If None, it will default to
-    #             ``benchmarl/conf/experiment/base_experiment.yaml``
-
-    #     Returns:
-    #         the loaded :class:`~benchmarl.experiment.ExperimentConfig`
-    #     """
-    #     if path is None:
-    #         yaml_path = (
-    #             Path(__file__).parent.parent
-    #             / "conf"
-    #             / "experiment"
-    #             / "base_experiment.yaml"
-    #         )
-    #         return ExperimentConfig(**_read_yaml_config(str(yaml_path.resolve())))
-    #     else:
-    #         return ExperimentConfig(**_read_yaml_config(path))
-
     def validate(self, on_policy: bool):
         """
         Validates config.
@@ -315,4 +268,3 @@ class ExperimentConfig:
             )
         if self.max_n_frames is None and self.max_n_iters is None:
             raise ValueError("n_iters and total_frames are both not set")
-

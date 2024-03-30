@@ -1,11 +1,12 @@
-
-
 from dataclasses import dataclass
 from typing import Type
 
-from benchmarl.algorithms import Iql
-from benchmarl.algorithms.common import Algorithm
 from benchmarl.conf.algorithm.cfg_common import AlgorithmConfig
+
+from benchmarl.lib.algorithms import Iql
+from benchmarl.lib.algorithms.common import Algorithm
+
+
 @dataclass
 class IqlConfig(AlgorithmConfig):
     """Configuration dataclass for :class:`~benchmarl.algorithms.Iql`."""

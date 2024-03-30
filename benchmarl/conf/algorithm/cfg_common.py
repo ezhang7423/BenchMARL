@@ -1,24 +1,9 @@
-import pathlib
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 from dataclasses import dataclass
-from typing import Any, Dict, Iterable, Optional, Tuple, Type
+from typing import Type
 
-from benchmarl.algorithms.common import Algorithm
-from tensordict import TensorDictBase
-from tensordict.nn import TensorDictModule, TensorDictSequential
-from torchrl.data import (
-    DiscreteTensorSpec,
-    LazyTensorStorage,
-    OneHotDiscreteTensorSpec,
-    ReplayBuffer,
-    TensorDictReplayBuffer,
-)
-from torchrl.data.replay_buffers import RandomSampler, SamplerWithoutReplacement
-from torchrl.objectives import LossModule
-from torchrl.objectives.utils import HardUpdate, SoftUpdate, TargetNetUpdater
+from benchmarl.lib.algorithms.common import Algorithm
 
-from benchmarl.models.common import ModelConfig
-from benchmarl.utils import _read_yaml_config, DEVICE_TYPING
 
 @dataclass
 class AlgorithmConfig:
@@ -46,37 +31,6 @@ class AlgorithmConfig:
             **self.__dict__,  # Passes all the custom config parameters
             experiment=experiment,
         )
-
-    @staticmethod
-    def _load_from_yaml(name: str) -> Dict[str, Any]:
-        yaml_path = (
-            pathlib.Path(__file__).parent.parent
-            / "conf"
-            / "algorithm"
-            / f"{name.lower()}.yaml"
-        )
-        return _read_yaml_config(str(yaml_path.resolve()))
-
-    @classmethod
-    def get_from_yaml(cls, path: Optional[str] = None):
-        """
-        Load the algorithm configuration from yaml
-
-        Args:
-            path (str, optional): The full path of the yaml file to load from.
-                If None, it will default to
-                ``benchmarl/conf/algorithm/self.associated_class().__name__``
-
-        Returns: the loaded AlgorithmConfig
-        """
-        if path is None:
-            return cls(
-                **AlgorithmConfig._load_from_yaml(
-                    name=cls.associated_class().__name__,
-                )
-            )
-        else:
-            return cls(**_read_yaml_config(path))
 
     @staticmethod
     @abstractmethod

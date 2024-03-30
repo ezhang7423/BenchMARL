@@ -5,26 +5,23 @@
 #
 
 import collections
-import importlib
 import json
 from os import walk
 from pathlib import Path
 from typing import Dict, List, Optional
 
-_has_marl_eval = importlib.util.find_spec("marl_eval") is not None
-if _has_marl_eval:
-    from marl_eval.plotting_tools.plotting import (
-        aggregate_scores,
-        performance_profiles,
-        plot_single_task,
-        probability_of_improvement,
-        sample_efficiency_curves,
-    )
-    from marl_eval.utils.data_processing_utils import (
-        create_matrices_for_rliable,
-        data_process_pipeline,
-    )
-    from matplotlib import pyplot as plt
+from marl_eval.plotting_tools.plotting import (
+    aggregate_scores,
+    performance_profiles,
+    plot_single_task,
+    probability_of_improvement,
+    sample_efficiency_curves,
+)
+from marl_eval.utils.data_processing_utils import (
+    create_matrices_for_rliable,
+    data_process_pipeline,
+)
+from matplotlib import pyplot as plt
 
 
 def get_raw_dict_from_multirun_folder(multirun_folder: str) -> Dict:

@@ -1,0 +1,47 @@
+[tool.poetry]
+authors = ["Your Name <you@example.com>"]
+description = ""
+name = "benchmarl"
+readme = "README.md"
+version = "1.1.1"
+
+[tool.poetry.dependencies]
+arch = "5.0.1"
+eztils = "^0.4.94"
+id-marl-eval = "^0.0.4"
+pettingzoo = {version = "^1.24.3", optional = true, extras = ["all"]}
+python = "^3.10"
+torch_geometric = {version = "^2.5.2", optional = true}
+torchrl = "0.3.1"
+tqdm = "^4.66.2"
+vmas = "^1.3.4"
+wandb = "^0.16.5"
+
+[build-system]
+build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core"]
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.12.1"
+isort = "^5.13.2"
+mypy = "^1.8.0"
+pre-commit = "^3.6.0"
+pytest = "^7.4.4"
+pyupgrade = "^3.15.0"
+
+####################################
+# Tools #
+####################################
+ipdb = "^0.13.13"
+ipykernel = "^6.29.4"
+ipython = "^8.20.0"
+pyflyby = "^1.9.2"
+
+[tool.poetry.scripts]
+# Entry points for the package https://python-poetry.org/docs/pyproject/#scripts
+"benchmarl" = "benchmarl.run:main"
+
+[tool.poetry.extras]
+gnn = ["torch_geometric"]
+pettingzoo = ["pettingzoo"]
+vmas = ["vmas"]

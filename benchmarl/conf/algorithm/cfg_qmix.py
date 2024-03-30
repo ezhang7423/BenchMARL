@@ -1,10 +1,11 @@
-
 from dataclasses import dataclass
 from typing import Type
 
-from benchmarl.algorithms import Qmix
-from benchmarl.algorithms.common import Algorithm
 from benchmarl.conf.algorithm.cfg_common import AlgorithmConfig
+
+from benchmarl.lib.algorithms import Qmix
+from benchmarl.lib.algorithms.common import Algorithm
+
 
 @dataclass
 class QmixConfig(AlgorithmConfig):

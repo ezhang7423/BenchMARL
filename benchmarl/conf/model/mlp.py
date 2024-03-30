@@ -1,16 +1,15 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, MISSING
+from dataclasses import dataclass
 from typing import Optional, Sequence, Type
 
 import torch
-from tensordict import TensorDictBase
-from torch import nn
-from torchrl.modules import MLP, MultiAgentMLP
 
-from benchmarl.models.common import Model, ModelConfig
-from benchmarl.models.mlp import Mlp
-from benchmarl.utils import list_field
+from benchmarl.lib.models.common import ModelConfig
+from benchmarl.lib.models.mlp import Mlp
+from benchmarl.lib.utils import list_field
+from torch import nn
+
 
 @dataclass
 class MlpConfig(ModelConfig):
