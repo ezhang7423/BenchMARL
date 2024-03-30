@@ -13,7 +13,7 @@ from torchrl.data import CompositeSpec, UnboundedContinuousTensorSpec
 from torchrl.modules import EGreedyModule, QValueModule
 from torchrl.objectives import DQNLoss, LossModule, ValueEstimators
 
-from benchmarl.algorithms.common import Algorithm, AlgorithmConfig
+from benchmarl.algorithms.common import Algorithm
 from benchmarl.models.common import ModelConfig
 
 
@@ -182,25 +182,3 @@ class Iql(Algorithm):
     #####################
 
 
-@dataclass
-class IqlConfig(AlgorithmConfig):
-    """Configuration dataclass for :class:`~benchmarl.algorithms.Iql`."""
-
-    delay_value: bool = MISSING
-    loss_function: str = MISSING
-
-    @staticmethod
-    def associated_class() -> Type[Algorithm]:
-        return Iql
-
-    @staticmethod
-    def supports_continuous_actions() -> bool:
-        return False
-
-    @staticmethod
-    def supports_discrete_actions() -> bool:
-        return True
-
-    @staticmethod
-    def on_policy() -> bool:
-        return False

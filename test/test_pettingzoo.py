@@ -16,7 +16,7 @@ from benchmarl.algorithms import (
     QmixConfig,
     VdnConfig,
 )
-from benchmarl.algorithms.common import AlgorithmConfig
+from benchmarl.conf.algorithm.cfg_common import AlgorithmConfig
 from benchmarl.environments import PettingZooTask, Task
 from benchmarl.experiment import Experiment
 

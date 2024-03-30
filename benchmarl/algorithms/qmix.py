@@ -13,7 +13,7 @@ from torchrl.data import CompositeSpec, UnboundedContinuousTensorSpec
 from torchrl.modules import EGreedyModule, QMixer, QValueModule
 from torchrl.objectives import LossModule, QMixerLoss, ValueEstimators
 
-from benchmarl.algorithms.common import Algorithm, AlgorithmConfig
+from benchmarl.algorithms.common import Algorithm
 from benchmarl.models.common import ModelConfig
 
 
@@ -208,26 +208,3 @@ class Qmix(Algorithm):
         return mixer
 
 
-@dataclass
-class QmixConfig(AlgorithmConfig):
-    """Configuration dataclass for :class:`~benchmarl.algorithms.Qmix`."""
-
-    mixing_embed_dim: int = MISSING
-    delay_value: bool = MISSING
-    loss_function: str = MISSING
-
-    @staticmethod
-    def associated_class() -> Type[Algorithm]:
-        return Qmix
-
-    @staticmethod
-    def supports_continuous_actions() -> bool:
-        return False
-
-    @staticmethod
-    def supports_discrete_actions() -> bool:
-        return True
-
-    @staticmethod
-    def on_policy() -> bool:
-        return False

@@ -8,7 +8,7 @@
 import pytest
 
 from benchmarl.algorithms import algorithm_config_registry, MappoConfig, QmixConfig
-from benchmarl.algorithms.common import AlgorithmConfig
+from benchmarl.conf.algorithm.cfg_common import AlgorithmConfig
 from benchmarl.environments import Smacv2Task
 from benchmarl.experiment import Experiment
 

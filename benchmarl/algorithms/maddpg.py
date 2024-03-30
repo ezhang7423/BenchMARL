@@ -19,7 +19,7 @@ from torchrl.modules import (
 )
 from torchrl.objectives import DDPGLoss, LossModule, ValueEstimators
 
-from benchmarl.algorithms.common import Algorithm, AlgorithmConfig
+from benchmarl.algorithms.common import Algorithm
 from benchmarl.models.common import ModelConfig
 
 
@@ -308,28 +308,3 @@ class Maddpg(Algorithm):
         return TensorDictSequential(*modules)
 
 
-@dataclass
-class MaddpgConfig(AlgorithmConfig):
-    """Configuration dataclass for :class:`~benchmarl.algorithms.Maddpg`."""
-
-    share_param_critic: bool = MISSING
-
-    loss_function: str = MISSING
-    delay_value: bool = MISSING
-    use_tanh_mapping: bool = MISSING
-
-    @staticmethod
-    def associated_class() -> Type[Algorithm]:
-        return Maddpg
-
-    @staticmethod
-    def supports_continuous_actions() -> bool:
-        return True
-
-    @staticmethod
-    def supports_discrete_actions() -> bool:
-        return False
-
-    @staticmethod
-    def on_policy() -> bool:
-        return False

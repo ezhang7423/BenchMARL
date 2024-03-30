@@ -21,7 +21,7 @@ from torchrl.modules import (
 )
 from torchrl.objectives import ClipPPOLoss, LossModule, ValueEstimators
 
-from benchmarl.algorithms.common import Algorithm, AlgorithmConfig
+from benchmarl.algorithms.common import Algorithm
 from benchmarl.models.common import ModelConfig
 
 
@@ -329,31 +329,3 @@ class Mappo(Algorithm):
         return value_module
 
 
-@dataclass
-class MappoConfig(AlgorithmConfig):
-    """Configuration dataclass for :class:`~benchmarl.algorithms.Mappo`."""
-
-    share_param_critic: bool = MISSING
-    clip_epsilon: float = MISSING
-    entropy_coef: float = MISSING
-    critic_coef: float = MISSING
-    loss_critic_type: str = MISSING
-    lmbda: float = MISSING
-    scale_mapping: str = MISSING
-    use_tanh_normal: bool = MISSING
-
-    @staticmethod
-    def associated_class() -> Type[Algorithm]:
-        return Mappo
-
-    @staticmethod
-    def supports_continuous_actions() -> bool:
-        return True
-
-    @staticmethod
-    def supports_discrete_actions() -> bool:
-        return True
-
-    @staticmethod
-    def on_policy() -> bool:
-        return True

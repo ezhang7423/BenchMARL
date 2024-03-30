@@ -13,7 +13,7 @@ from torchrl.data import CompositeSpec, UnboundedContinuousTensorSpec
 from torchrl.modules import EGreedyModule, QValueModule, VDNMixer
 from torchrl.objectives import LossModule, QMixerLoss, ValueEstimators
 
-from benchmarl.algorithms.common import Algorithm, AlgorithmConfig
+from benchmarl.algorithms.common import Algorithm
 from benchmarl.models.common import ModelConfig
 
 
@@ -196,25 +196,3 @@ class Vdn(Algorithm):
         return mixer
 
 
-@dataclass
-class VdnConfig(AlgorithmConfig):
-    """Configuration dataclass for :class:`~benchmarl.algorithms.Vdn`."""
-
-    delay_value: bool = MISSING
-    loss_function: str = MISSING
-
-    @staticmethod
-    def associated_class() -> Type[Algorithm]:
-        return Vdn
-
-    @staticmethod
-    def supports_continuous_actions() -> bool:
-        return False
-
-    @staticmethod
-    def supports_discrete_actions() -> bool:
-        return True
-
-    @staticmethod
-    def on_policy() -> bool:
-        return False

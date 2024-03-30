@@ -4,7 +4,7 @@
 #  LICENSE file in the root directory of this source tree.
 #
 
-from benchmarl.algorithms.common import AlgorithmConfig
+from benchmarl.conf.algorithm.cfg_common import AlgorithmConfig
 from benchmarl.environments import Task
 from benchmarl.experiment import Experiment, ExperimentConfig
 from benchmarl.models.common import ModelConfig

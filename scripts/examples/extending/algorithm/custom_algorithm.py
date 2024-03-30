@@ -7,7 +7,7 @@
 from dataclasses import dataclass, MISSING
 from typing import Dict, Iterable, Tuple, Type
 
-from benchmarl.algorithms.common import Algorithm, AlgorithmConfig
+from benchmarl.algorithms.common import Algorithm
 from benchmarl.models.common import ModelConfig
 
 from tensordict import TensorDictBase

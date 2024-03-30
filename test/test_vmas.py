@@ -17,7 +17,7 @@ from benchmarl.algorithms import (
     QmixConfig,
     VdnConfig,
 )
-from benchmarl.algorithms.common import AlgorithmConfig
+from benchmarl.conf.algorithm.cfg_common import AlgorithmConfig
 from benchmarl.environments import Task, VmasTask
 from benchmarl.experiment import Experiment
 from benchmarl.models import MlpConfig
