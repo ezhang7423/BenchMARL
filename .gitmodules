@@ -1,0 +1,6 @@
+[submodule "rl"]
+	path = rl
+	url = git@github.com:matteobettini/rl.git
+[submodule "meltingpot"]
+	path = meltingpot
+	url = git@github.com:boiplusplus/meltingpot.git
