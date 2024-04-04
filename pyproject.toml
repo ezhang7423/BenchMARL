@@ -20,6 +20,7 @@ jaxlib = "0.4.23"
 jax = "0.4.23"
 dm-meltingpot = {path = "meltingpot", develop = true}
 tensorflow = "^2.16.1"
+python-dotenv = "^1.0.1"
 
 [build-system]
 build-backend = "poetry.core.masonry.api"

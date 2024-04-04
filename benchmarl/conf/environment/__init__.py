@@ -261,9 +261,10 @@ class Task(Enum):
 from .pettingzoo import PettingZooTask
 from .smacv2 import Smacv2Task
 from .vmas import VmasTask
+from .meltingpot import MeltingPotTask
 
 task_config_registry = {}
-for env in [VmasTask, Smacv2Task, PettingZooTask]:
+for env in [VmasTask, Smacv2Task, PettingZooTask, MeltingPotTask]:
     env_config_registry = {
         f"{env.env_name()}.{task.name.lower()}": task for task in env
     }

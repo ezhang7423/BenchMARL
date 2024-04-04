@@ -43,7 +43,12 @@ class DefaultParams:  # the config for this file.
     algorithm: str = "cfg_vdn.VdnConfig"
     task: str = "vmas.balance.TaskConfig"
     model: str = "mlp.MlpConfig"
-    critic_model: str = "mlp.MlpConfig"
+    critic_model: str = "mlp.MlpConfig"    
+    
+    algorithm: str = "cfg_mappo.MappoConfig"
+    task: str = "meltingpot.harvest_open.TaskConfig"
+    # model: str = "cfg_cnn.CnnConfig"
+    # critic_model: str = "cfg_cnn.CnnConfig"    
     seed: int = 42
     wandb: bool = False
     # nested: Nest = field(default_factory=Nest) # TODO alternatively than current method, support nested dataclasses in the future (make a better hydra)
@@ -96,12 +101,15 @@ def setup_experiment():
         DefaultParams.task = config["_task"]
 
     # get algorithma and task configs
-    parser.add_argument("-a", "--algorithm", type=str, default=DefaultParams.algorithm)
-    parser.add_argument("-t", "--task", type=str, default=DefaultParams.task)
+    parser.add_argument("-a", "--algorithm_cfg", type=str, default=DefaultParams.algorithm)
+    parser.add_argument("-t", "--task_cfg", type=str, default=DefaultParams.task)
     args, *_ = parser.parse_known_args()
-
-    algorithm_config = import_module("benchmarl.conf.algorithm", args.algorithm)
-    task_config = import_module("benchmarl.conf.environment", args.task)
+    
+    DefaultParams.algorithm = args.algorithm_cfg
+    DefaultParams.task = args.task_cfg
+    
+    algorithm_config = import_module("benchmarl.conf.algorithm", DefaultParams.algorithm)
+    task_config = import_module("benchmarl.conf.environment", DefaultParams.task)
 
     # now parse the actual dataclasses specified by the configs
     parser = HfArgumentParser((algorithm_config, task_config))
@@ -136,8 +144,8 @@ def setup_experiment():
     # add the algorithm and task
     with open(LOG_DIR / "config.json", "r") as config:
         serialized_cfg = json.load(config)
-        serialized_cfg["_algorithm"] = args.algorithm
-        serialized_cfg["_task"] = args.task
+        serialized_cfg["_algorithm"] = args.algorithm_cfg
+        serialized_cfg["_task"] = args.task_cfg
     with open(LOG_DIR / "config.json", "w") as config:
         json.dump(serialized_cfg, config)
 
@@ -148,7 +156,7 @@ def main():
     algorithm_config, task_config = conf = setup_experiment()
     from benchmarl.conf.environment import task_config_registry
 
-    task_key = ".".join(DefaultParams.task.split(".")[:-1])
+    task_key = ".".join(DefaultParams.task.split(".")[:-1])        
     experiment = Experiment(
         task=task_config_registry[task_key].update_config(
             dataclasses.asdict(task_config)
@@ -159,7 +167,7 @@ def main():
         critic_model_config=import_module(
             "benchmarl.conf.model", DefaultParams.critic_model
         )(),
-        config=import_module("benchmarl.conf.experiment", DefaultParams.experiment)(),
+        config=import_module("benchmarl.conf.experiment", DefaultParams.experiment)(), # todo make configurable
     )
     print(f"[bold green]Welcome to benchmarl v{version}[/]")
     print(conf)

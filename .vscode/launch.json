@@ -5,20 +5,58 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Python Debugger: Current File",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${file}",
+      "console": "integratedTerminal",
+      "justMyCode": false,
+      "rules": [
+        {
+          "path": "/home/ezipe/git/sed-mothership/BenchMARL/.venv/lib/python3.11/site-packages/torch/**",
+          "include": false
+        },
+        {
+          "path": "/home/ezipe/git/sed-mothership/BenchMARL/.venv/lib/python3.11/site-packages/tensordict/**",
+          "include": false
+        }
+      ]
+    },
+    {
+      "name": "run harvest",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "benchmarl/run.py",
+      "console": "integratedTerminal",
+      "args": "-a=cfg_mappo.MappoConfig -t=meltingpot.harvest_open.TaskConfig",
+      "justMyCode": false,
+      "rules": [
+        {
+          // /home/ezipe/git/sed-mothership/BenchMARL/.venv/lib/python3.11/site-packages/torch/nn/modules/conv.py
+          "path": "/home/ezipe/git/sed-mothership/BenchMARL/.venv/lib/python3.11/site-packages/torch/**",
+          "include": false
+        },
+        {
+          "path": "/home/ezipe/git/sed-mothership/BenchMARL/.venv/lib/python3.11/site-packages/tensordict/**",
+          "include": false
+        }
+      ]
+    },
+    {
       "name": "run waterworld",
       "type": "debugpy",
       "request": "launch",
       "program": "benchmarl/run.py",
       "console": "integratedTerminal",
-      "args": "algorithm=mappo task=pettingzoo/waterworld experiment.loggers=[csv]",
+      "args": "--algorithm_cfg=cfg_mappo.MappoConfig --task_cfg=pettingzoo.waterworld.TaskConfig", // TODO add experiment logger
       "justMyCode": false,
       "rules": [
         {
-          "path": "/home/ezipe/git/BenchMARL/venv/lib/python3.10/site-packages/torch/**",
+          "path": "/home/ezipe/git/sed-mothership/BenchMARL/.venv/lib/python3.11/site-packages/torch/**",
           "include": false
         },
         {
-          "path": "/home/ezipe/git/BenchMARL/venv/lib/python3.10/site-packages/tensordict/**",
+          "path": "/home/ezipe/git/sed-mothership/BenchMARL/.venv/lib/python3.11/site-packages/tensordict/**",
           "include": false
         }
       ]
